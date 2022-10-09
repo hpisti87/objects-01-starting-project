@@ -1,19 +1,49 @@
-const movieList = document.getElementById('movie-list');
+const addMovieBtn = document.getElementById('add-movie-btn');
+const searchBtn = document.getElementById('search-btn');
 
-movieList.style['background-color'] = 'red';
-movieList.style.display = 'block';
+const movies = [];
 
-let person = {
-  'first name': 'Max',
-  age: 30,
-  hobbies: ['Sports', 'Cooking'],
-  greet: function () {
-    alert('Hi there');
+const renderMovies = () => {
+  const movieList = document.getElementById('movie-list');
+
+  if (movies.length === 0) {
+    movieList.classList.remove('visible');
+    return;
+  } else {
+    movieList.classList.add('visible');
   }
+  movieList.innerHTML = '';
+
+  movies.forEach(movie => {
+    const movieEl = document.createElement('li');
+    movieEl.textContent = movie.info.title;
+    movieList.append(movieEl);
+  });
 };
 
-// delete person.age;
+const addMovieHandler = () => {
+  const title = document.getElementById('title').value;
+  const extraName = document.getElementById('extra-name').value;
+  const extraValue = document.getElementById('extra-value').value;
 
-person.isAdmin = true;
+  if (
+    title.trim() === '' ||
+    extraName.trim() === '' ||
+    extraValue.trim() === ''
+  ) {
+    return;
+  }
 
-console.log(person['first name']);
+  const newMovie = {
+    info: {
+      title,
+      [extraName]: extraValue
+    },
+    id: Math.random()
+  };
+
+  movies.push(newMovie);
+  renderMovies();
+};
+
+addMovieBtn.addEventListener('click', addMovieHandler);
